@@ -12,15 +12,17 @@ import skyboxTop from '/starfield/top.png';
 import skyboxBottom from '/starfield/bottom.png';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(85, innerWidth/innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(85, innerWidth/innerHeight, 1, 100);
 camera.position.set(-50,20,50);
+//camera.position.set(-20,10,20);
 //camera.position.set(0,5,35);
 camera.lookAt(0,0,0);
 
 const ambient_light = new THREE.AmbientLight( 0xffffff, 0.5 );
 
 const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#bg')
+  canvas: document.querySelector('#bg'),
+  powerPreference: "high-performance"
 })
 renderer.setPixelRatio(devicePixelRatio);
 renderer.setSize(innerWidth, innerHeight);
@@ -47,10 +49,19 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 4;
 
+/*
+const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128, {generateMipmaps:true, minFilter:LinearMipMapLinearFilter});
+const cubeCamera = new THREE.CubeCamera(1,1000, cubeRenderTarget);
+cubeCamera.position.set(0,0,0);
+scene.add(cubeCamera);
+*/
+
+//'/models/Milkyway_small.hdr'
 function loadAssets(){
   rgbe_loader.load('/models/Milkyway_small.hdr', function(texture){
     texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = texture;
+    //scene.environment = cubeRenderTarget;
     gltf_loader.load(
       'models/jwst.glb',
       function(gltf){
@@ -67,6 +78,13 @@ function loadAssets(){
         ],
         function(){
           scene.background = skybox_texture;
+          //scene.environment = skybox_texture;
+
+          scene.overrideMaterial = new THREE.MeshStandardMaterial({metalness:0.5}); // Can be used for low-poly
+          scene.overrideMaterial = null;                             // undo with null
+
+          console.log(jwst.getObjectById("object_16"))
+
           animate();
         });
       }
@@ -77,6 +95,7 @@ function loadAssets(){
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
+  //cubeCamera.update(renderer, scene);
   //jwst.rotation.y+=0.005
   controls.update();
 }
