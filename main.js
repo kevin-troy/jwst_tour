@@ -13,7 +13,8 @@ import skyboxBottom from '/starfield/bottom.png';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(85, innerWidth/innerHeight, 0.1, 100);
-camera.position.set(-30,10,30);
+camera.position.set(-50,20,50);
+//camera.position.set(0,5,35);
 camera.lookAt(0,0,0);
 
 const ambient_light = new THREE.AmbientLight( 0xffffff, 0.5 );
