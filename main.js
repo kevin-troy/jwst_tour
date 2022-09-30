@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls'
+import jwstURL from '/models/jwst.glb?url'
 
 import skyboxFront from '/starfield/front.png';
 import skyboxBack from '/starfield/back.png';
@@ -49,21 +50,13 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 4;
 
-/*
-const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128, {generateMipmaps:true, minFilter:LinearMipMapLinearFilter});
-const cubeCamera = new THREE.CubeCamera(1,1000, cubeRenderTarget);
-cubeCamera.position.set(0,0,0);
-scene.add(cubeCamera);
-*/
-
-//'/models/Milkyway_small.hdr'
 function loadAssets(){
   rgbe_loader.load('/models/Milkyway_small.hdr', function(texture){
     texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = texture;
     //scene.environment = cubeRenderTarget;
     gltf_loader.load(
-      'models/jwst.glb',
+      jwstURL,
       function(gltf){
         jwst = gltf.scene;
         jwst.name = "jwst"
@@ -81,7 +74,7 @@ function loadAssets(){
           //scene.environment = skybox_texture;
 
           scene.overrideMaterial = new THREE.MeshStandardMaterial({metalness:0.5}); // Can be used for low-poly
-          scene.overrideMaterial = null;                             // undo with null
+          scene.overrideMaterial = null;                                            // undo with null
 
           console.log(jwst.getObjectById("object_16"))
 
