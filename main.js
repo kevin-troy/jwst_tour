@@ -1,8 +1,8 @@
 import './style.css'
 //import * as THREE from 'three';
 import * as THREE from "/node_modules/three/build/three.module.js";
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { GLTFLoader } from '/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import { RGBELoader } from '/node_modules/three/examples/jsm/loaders/RGBELoader.js';
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls'
 import jwstURL from '/models/jwst.glb?url'
 
@@ -24,7 +24,8 @@ const ambient_light = new THREE.AmbientLight( 0xffffff, 0.5 );
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
-  powerPreference: "high-performance"
+  powerPreference: "high-performance",
+  precision: "lowp"
 })
 renderer.setPixelRatio(devicePixelRatio);
 renderer.setSize(innerWidth, innerHeight);
